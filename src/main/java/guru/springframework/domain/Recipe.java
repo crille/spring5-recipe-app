@@ -20,8 +20,10 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    //todo add
-    //private Difficulty difficulty
+
+    //Använd EnumType.STRING, använder du ORDINAL så kommer det inte att stämma i db om du lägger till en difficulty
+    @Enumerated(value = EnumType.STRING)
+    private Difficulty difficulty;
 
     @Lob //will be stored as a binary (blob field in the database)
     private Byte[] image;
@@ -33,6 +35,12 @@ public class Recipe {
     //mappedBy points out the target property "recipe" on the Many class (Ingredient)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category",
+        joinColumns = @JoinColumn(name = "recipe_id"),
+         inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories;
 
 
 }
